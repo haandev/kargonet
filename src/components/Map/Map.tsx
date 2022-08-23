@@ -78,14 +78,14 @@ const Map = () => {
       <h1 className="mt-8 text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl text-center text-amber-400 leading-7 md:leading-10">
         Anında fiyat hesaplamak için başlangıç ve bitiş konumunu girin
       </h1>
-      <div>
+      <div className='my-8'>
         <GeocodeInput
-          className="my-16 mx-4 w-72 z-50 inline-block"
+          className="my-2 mx-4 w-72 z-50 inline-block"
           onSelectLocation={(location) => putPointer(location, setStartMarker)}
           placeholder="nereden?"
         />
         <GeocodeInput
-          className="my-16 mx-4 w-72 inline-block"
+          className="my-2 mx-4 w-72 inline-block"
           onSelectLocation={(location) => putPointer(location, setEndMarker)}
           placeholder="nereye?"
         />
@@ -113,6 +113,7 @@ const Map = () => {
       <MapContainer
         ref={mapRef}
         whenReady={handleReady}
+        className="w-[80%] mx-auto my-8 md:w-full"
         style={{ height: 700 }}
         center={[51.505, -0.09]}
         zoom={13}
