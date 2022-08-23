@@ -24,7 +24,7 @@ const GeocodeInput: React.FC<GeocodeInputProps> = (props) => {
   const [selected, setSelected] = useState<GeocodingLocation>()
   const [foundLocations, setFoundLocations] = useState<GeocodingLocation[]>([])
   const [query, setQuery] = useState<string>('')
-  const debouncedValue = useDebounce<string>(query, 1000)
+  const debouncedValue = useDebounce<string>(query, 400)
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)

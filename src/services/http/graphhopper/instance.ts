@@ -8,7 +8,7 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
   config.params = {
     ...config.params,
-    profile: 'small_truck',
+    profile: 'truck',
     key: '8c32a82e-7a2e-4ac0-938c-04e98c272613',
     locale: 'tr',
   }

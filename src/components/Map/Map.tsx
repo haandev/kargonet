@@ -76,45 +76,25 @@ const Map = () => {
   return (
     <div>
       <h1 className="mt-8 text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl text-center text-amber-400 leading-7 md:leading-10">
-        Anında fiyat hesaplamak için başlangıç ve bitiş konumunu girin
+        Başlangıç ve bitiş konumunu girin
       </h1>
       <div className='my-8'>
         <GeocodeInput
-          className="my-2 mx-4 w-72 z-50 inline-block"
+          className="my-2 mx-auto md:mx-2 w-80 md:w-96 z-50 inline-block"
           onSelectLocation={(location) => putPointer(location, setStartMarker)}
           placeholder="nereden?"
         />
         <GeocodeInput
-          className="my-2 mx-4 w-72 inline-block"
+          className="my-2 mx-auto md:mx-2 w-80 md:w-96 inline-block"
           onSelectLocation={(location) => putPointer(location, setEndMarker)}
           placeholder="nereye?"
         />
       </div>
-      <h1 className="mb-8  text-center text-earth-600 leading-7 md:leading-10">
-        {!(startMarker && endMarker) ? (
-          'Hem yükleme hem boşaltma konumu seçilmelidir'
-        ) : (
-          <p>
-            <span className="font-semibold">{nameConverter(startMarker)}</span>{' '}
-            konumundan{' '}
-            <span className="font-semibold">{nameConverter(endMarker)}</span>{' '}
-            konumuna olan mesafe{' '}
-            <span className="font-semibold">
-              {(route.distance / 1000).toFixed(2)}km
-            </span>{' '}
-            olup teklif ettiğimiz taşıma ücreti{' '}
-            <span className="font-semibold">
-              {((route.distance / 1000) * 15 + 250).toFixed(0)}₺
-            </span>{' '}
-            olarak hesaplanmıştır.
-          </p>
-        )}
-      </h1>
+    
       <MapContainer
         ref={mapRef}
         whenReady={handleReady}
-        className="w-[80%] mx-auto my-8 md:w-full"
-        style={{ height: 700 }}
+        className="w-80 mx-auto my-8 md:w-full h-[300px] md:h-{500px]"
         center={[51.505, -0.09]}
         zoom={13}
         scrollWheelZoom={false}
@@ -131,6 +111,11 @@ const Map = () => {
           </Marker>
         )}
       </MapContainer>
+      <button
+              className="w-80 mx-auto mb-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-400 hover:bg-amber-500"
+            >
+              Fiyat al
+            </button>
     </div>
   )
 }
