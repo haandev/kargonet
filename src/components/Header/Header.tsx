@@ -89,7 +89,7 @@ export default function Header() {
             <a href="#">
               <span className="sr-only">Workflow</span>
               <img
-                className="h-48 w-auto sm:h-24"
+                className="h-16 w-auto sm:h-24"
                 src={weblogo}
                 alt=""
               />

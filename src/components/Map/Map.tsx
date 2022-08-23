@@ -74,28 +74,33 @@ const Map = () => {
   }
 
   return (
-    <div>
+    <div
+      className="text-left flex flex-col items-center
+  "
+    >
       <h1 className="mt-8 text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl text-center text-amber-400 leading-7 md:leading-10">
         Başlangıç ve bitiş konumunu girin
       </h1>
-      <div className='my-8'>
+      <div className="z-[9999] mt-8 mb-2 px-8 xl:px-0 text-left flex flex-col xl:flex-row items-center w-full justify-center">
         <GeocodeInput
-          className="my-2 mx-auto md:mx-2 w-80 md:w-96 z-50 inline-block"
+          label="Yükleme konumu"
+          className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] z-50 inline-block"
           onSelectLocation={(location) => putPointer(location, setStartMarker)}
           placeholder="nereden?"
         />
         <GeocodeInput
-          className="my-2 mx-auto md:mx-2 w-80 md:w-96 inline-block"
+          label="Boşaltma konumu"
+          className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] inline-block"
           onSelectLocation={(location) => putPointer(location, setEndMarker)}
           placeholder="nereye?"
         />
       </div>
-    
+
       <MapContainer
         ref={mapRef}
         whenReady={handleReady}
-        className="w-80 mx-auto my-8 md:w-full h-[300px] md:h-{500px]"
-        center={[51.505, -0.09]}
+        className="max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto my-4  h-[300px] md:h-{500px]"
+        center={[41.0766019, 29.052495]}
         zoom={13}
         scrollWheelZoom={false}
       >
@@ -111,11 +116,9 @@ const Map = () => {
           </Marker>
         )}
       </MapContainer>
-      <button
-              className="w-80 mx-auto mb-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-400 hover:bg-amber-500"
-            >
-              Fiyat al
-            </button>
+      <button className="w-80 mx-auto mb-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-400 hover:bg-amber-500">
+        Fiyat al
+      </button>
     </div>
   )
 }

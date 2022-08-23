@@ -15,6 +15,7 @@ function App() {
       <Header />
       <Hero />
       <Map/>
+      <Footer/>
     </div>
   )
 }

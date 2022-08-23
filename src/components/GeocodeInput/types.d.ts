@@ -4,4 +4,5 @@ export interface GeocodeInputProps {
   onSelectLocation?: (location:GeocodingLocation) => void
   className?:string
   placeholder?:string
+  label?:string
 }
