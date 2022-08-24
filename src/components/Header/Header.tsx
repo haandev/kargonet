@@ -140,7 +140,7 @@ export default function Header() {
                               className="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"
                             >
                               <item.icon className="flex-shrink-0 h-6 w-6 text-amber-400" aria-hidden="true" />
-                              <div className="ml-4">
+                              <div className="ml-4 w-full">
                                 <p className="text-base font-medium text-gray-900">{item.name}</p>
                                 <p className="mt-1 text-sm text-gray-500">{item.description}</p>
                               </div>

@@ -1,124 +1,50 @@
-import React from 'react'
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
-import GeocodeInput, { nameConverter } from './../GeocodeInput/GeocodeInput'
-import {
-  GeocodingLocation,
-  Point,
-} from './../../services/http/graphhopper/types'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import * as GraphHopper from './../../services/http/graphhopper/endpoints'
-import L from 'leaflet'
-let routingLayer: any
+import React, { useCallback, useMemo, useState } from "react"
+import { GeocodingLocation } from "../../services/http/graphhopper/types"
+import { Steps } from "../Steps"
+import { StepDataType } from "../Steps/types"
+import Step1Markers from "./Step1Markers"
+import Step2Calendar from "./Step2Calendar"
+
+export type TripType = {
+  startMarker: GeocodingLocation
+  endMarker: GeocodingLocation
+  route: any
+}
+
 const Map = () => {
-  const [startMarker, setStartMarker] = useState<GeocodingLocation>()
-  const [endMarker, setEndMarker] = useState<GeocodingLocation>()
-  const [route, setRoute] = useState<any>({ distance: 0 })
-  const mapRef = useRef<any>(null)
-  const putPointer = useCallback(
-    (
-      location: GeocodingLocation,
-      stateSetter: React.Dispatch<
-        React.SetStateAction<GeocodingLocation | undefined>
-      >
-    ) => {
-      let prevKeep
-      stateSetter((prev) => {
-        prevKeep = prev
-        return location
-      })
-      mapRef.current.flyTo([location.point.lat, location.point.lng], 14)
-    },
-    []
+  const [trip, setTrip] = useState<TripType>()
+
+  const handleChangeTrip = useCallback((trip: any) => {
+    setTrip(trip)
+  }, [])
+
+  const steps = useMemo<StepDataType>(
+    () => [
+      {
+        name: "Başlangıç ve bitiş konumlarını seçin",
+        children: <Step1Markers onChangeTrip={handleChangeTrip} />,
+        continueCondition: Boolean(trip?.route) || true, //TODO:remove true
+        nextTitle: "Tarih Seçin",
+      },
+      {
+        name: "Sizin için uygun tarihleri seçin",
+        children: <Step2Calendar onChangeTrip={handleChangeTrip} />,
+        continueCondition: true,
+      },
+      { name: "Step 3", continueCondition: true },
+      { name: "Step 4", continueCondition: true },
+      { name: "Step 5", continueCondition: true },
+    ],
+    [handleChangeTrip, trip?.route]
   )
-  useEffect(() => {
-    if (startMarker && endMarker) {
-      routingLayer?.clearLayers?.()
-      GraphHopper.Route({
-        point: [
-          `${startMarker.point.lat},${startMarker.point.lng}`,
-          `${endMarker.point.lat},${endMarker.point.lng}`,
-        ],
-      }).then((data: any) => {
-        let path = data.paths[0]
-        setRoute(path)
-        routingLayer.addData({
-          type: 'Feature',
-          geometry: path.points,
-        } as any)
-        if (path.bbox) {
-          let minLon = path.bbox[0]
-          let minLat = path.bbox[1]
-          let maxLon = path.bbox[2]
-          let maxLat = path.bbox[3]
-          let tmpB = new L.LatLngBounds(
-            new L.LatLng(minLat, minLon),
-            new L.LatLng(maxLat, maxLon)
-          )
-          mapRef.current.fitBounds(tmpB)
-        }
-      })
-      routingLayer = L.geoJSON().addTo(mapRef.current)
-      routingLayer.options = {
-        style: { color: '#00cc33', weight: 8, opacity: 1 },
-      }
-    }
-  }, [startMarker, endMarker])
-  const handleReady = () => {
-    const attribution = document.getElementsByClassName(
-      'leaflet-control-attribution'
-    )
-
-    if (attribution.length) {
-      attribution[0].remove()
-    }
-  }
-
   return (
-    <div
-      className="text-left flex flex-col items-center
-  "
-    >
-      <h1 className="mt-8 text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl text-center text-amber-400 leading-7 md:leading-10">
-        Başlangıç ve bitiş konumunu girin
-      </h1>
-      <div className="z-[9999] mt-8 mb-2 px-8 xl:px-0 text-left flex flex-col xl:flex-row items-center w-full justify-center">
-        <GeocodeInput
-          label="Yükleme konumu"
-          className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] z-50 inline-block"
-          onSelectLocation={(location) => putPointer(location, setStartMarker)}
-          placeholder="nereden?"
-        />
-        <GeocodeInput
-          label="Boşaltma konumu"
-          className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] inline-block"
-          onSelectLocation={(location) => putPointer(location, setEndMarker)}
-          placeholder="nereye?"
-        />
-      </div>
-
-      <MapContainer
-        ref={mapRef}
-        whenReady={handleReady}
-        className="max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto my-4  h-[300px] md:h-{500px]"
-        center={[41.0766019, 29.052495]}
-        zoom={13}
-        scrollWheelZoom={false}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {!!startMarker && (
-          <Marker position={[startMarker.point.lat, startMarker.point.lng]}>
-            <Popup>{nameConverter(startMarker)}</Popup>
-          </Marker>
-        )}
-        {!!endMarker && (
-          <Marker position={[endMarker.point.lat, endMarker.point.lng]}>
-            <Popup>{nameConverter(endMarker)}</Popup>
-          </Marker>
-        )}
-      </MapContainer>
-      <button className="w-80 mx-auto mb-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-amber-400 hover:bg-amber-500">
-        Fiyat al
-      </button>
+    <div className="text-left flex flex-col items-center">
+      <Steps
+        stepData={steps}
+        className="mt-8"
+        onChangeStep={() => {}}
+        onFinish={() => {}}
+      />
     </div>
   )
 }
