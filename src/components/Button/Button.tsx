@@ -1,9 +1,7 @@
 import { PropsWithChildren } from "react"
+import classNames from "../../utils/classnames"
 import { ButtonProps } from "./types"
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ")
-}
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = (props) => {
   return (
     <button

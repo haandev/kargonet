@@ -17,6 +17,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+import classNames from '../../utils/classnames'
 
 const solutions = [
   {
@@ -76,9 +77,6 @@ const recentPosts = [
   { id: 3, name: 'Improve your customer experience', href: '#' },
 ]
 
-function classNames(...classes:string[]) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export default function Header() {
   return (

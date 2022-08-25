@@ -5,7 +5,8 @@ export interface StepsProps {
   className?: string
   onChangeStep?: (currentIndex: number, targetIndex: number) => void
   onFinish?: () => void
-  finishText?:string
+  finishText?: string
+  price?: number
 }
 export type StepRecordType = {
   name: string

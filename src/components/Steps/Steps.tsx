@@ -7,24 +7,25 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/solid"
 import { Button } from "../Button"
+import classNames from "../../utils/classnames"
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ")
-}
 export const Steps: React.FC<PropsWithChildren<StepsProps>> = (props) => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0)
   const [doneSteps, setDoneSteps] = useState<number[]>([])
 
   const handleNext = useCallback(() => {
     setCurrentStepIndex((prev) => {
-      setDoneSteps((oldDoneSteps) => {
-        return oldDoneSteps.includes(prev + 1)
-          ? oldDoneSteps
-          : [...oldDoneSteps, prev]
-      })
-      return prev + 1
+      if (prev !== props.stepData.length - 1) {
+        setDoneSteps((oldDoneSteps) => {
+          return oldDoneSteps.includes(prev + 1)
+            ? oldDoneSteps
+            : [...oldDoneSteps, prev]
+        })
+        return prev + 1
+      }
+      return prev
     })
-  }, [])
+  }, [props.stepData.length])
 
   const handlePrev = useCallback(() => {
     setCurrentStepIndex((prev) => prev - 1)
@@ -114,11 +115,22 @@ export const Steps: React.FC<PropsWithChildren<StepsProps>> = (props) => {
           ))}
         </ol>
       </nav>
-      <h1 className="my-8 text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl text-center text-amber-400 leading-7 md:leading-10">
-        {props.stepData[currentStepIndex].name}
-      </h1>
-      {props.stepData[currentStepIndex].children}
-      <div className="flex xl:flex-row justify-center max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto my-4">
+      <div className="flex flex-row justify-center items-center">
+        <div className="my-8 text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl text-center text-amber-400 leading-7 md:leading-10">
+          {props.stepData[currentStepIndex].name}
+          <div className="h-10 mt-2 flex justify-center items-center">
+            {!!props.price && (
+              <div className="h-full font-bold text-white w-32 flex items-center justify-center rounded-lg bg-earth-700">
+                {props.price} ₺
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="h-[500px] w-full ">
+        {props.stepData[currentStepIndex].children}
+      </div>
+      <div className="flex xl:flex-row justify-center w-full mx-auto my-4">
         {currentStepIndex !== 0 && (
           <Button
             className={classNames("mr-2 xl:mx-2 ", "w-[30%]", "xl:w-80")}

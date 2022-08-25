@@ -12,7 +12,6 @@ instance.interceptors.request.use((config) => {
     key: '8c32a82e-7a2e-4ac0-938c-04e98c272613',
     locale: 'tr',
   }
-  console.log(config)
   return config
 })
 

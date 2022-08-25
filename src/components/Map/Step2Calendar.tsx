@@ -13,7 +13,7 @@ const Step2Calendar: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
     [onChangeTrip]
   )
   return (
-    <div className="max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto h-[450px] ">
+    <div className="max-w-7xl w-full mx-auto h-100 ">
       <p className="text-center mb-2 text-gray-600 text-xs">
         Sizin için uygun olan bir veya daha fazla gün seçiniz. Daha fazla gün
         seçmeniz rota planlamasını kolaylaştıracağı için daha iyi bir indirim

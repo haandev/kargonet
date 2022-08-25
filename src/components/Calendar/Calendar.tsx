@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid"
 import { useCallback, useEffect, useState } from "react"
+import classNames from "../../utils/classnames"
 import { CalendarProps } from "./types"
 
 function getLocalDayNames() {
@@ -15,7 +16,6 @@ function getLocalDayNames() {
   }
   return days
 }
-
 const localeDayNames = getLocalDayNames()
 
 function getLocalMonthNames() {
@@ -32,15 +32,12 @@ function getLocalMonthNames() {
 }
 const localeMonthNames = getLocalMonthNames()
 
-function classNames(...classes: Array<string | null | undefined | boolean>) {
-  return classes.filter(Boolean).join(" ")
-}
-
 const chooseable = (date: Date) => {
   const today: Date = new Date()
   today.setHours(0, 0, 0, 0)
   return date > today
 }
+
 const isSelected = (day: any, selectedDays: any) =>
   Boolean(
     selectedDays.find(
@@ -48,8 +45,10 @@ const isSelected = (day: any, selectedDays: any) =>
     )
   )
 
-
-export const Calendar: React.FC<CalendarProps> = ({onChangeSelection,defaultValue}) => {
+export const Calendar: React.FC<CalendarProps> = ({
+  onChangeSelection,
+  defaultValue,
+}) => {
   const today = new Date()
   const [current, setCurrent] = useState<{ month: number; year: number }>({
     month: today.getMonth(),
@@ -74,13 +73,13 @@ export const Calendar: React.FC<CalendarProps> = ({onChangeSelection,defaultValu
   }, [])
 
   const [days, setDays] = useState<any>([])
-  const [selectedDays, setSelectedDays] = useState<any[]>(
-    defaultValue || []
-  )
+  const [selectedDays, setSelectedDays] = useState<any[]>(defaultValue || [])
   useEffect(() => {
     const firstDay = new Date(current.year, current.month)
     firstDay.setMinutes(firstDay.getMinutes() + firstDay.getTimezoneOffset())
-    const diff = ((firstDay.getDay() + 7) % 7) - 1
+    let diff = ((firstDay.getDay() + 7) % 7) - 1
+    console.log(diff)
+    //if (diff < 0) diff += 7
     firstDay.setDate(firstDay.getDate() - diff)
 
     const daysNew = []

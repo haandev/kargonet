@@ -1,9 +1,7 @@
 import { PropsWithChildren } from "react"
+import classNames from "../../utils/classnames"
 import { BadgeProps } from "./types"
 
-function classNames(...classes: Array<string | null | undefined | boolean>) {
-  return classes.filter(Boolean).join(" ")
-}
 export const Badge: React.FC<PropsWithChildren<BadgeProps>> = (props) => {
   return (
     <span

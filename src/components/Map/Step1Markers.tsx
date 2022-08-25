@@ -85,8 +85,8 @@ const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
     setMapReady(true)
   }
   return (
-    <div className="w-full">
-      <div className="z-[9999] mb-2 px-8 xl:px-0 text-left flex flex-col xl:flex-row items-center w-full justify-center">
+    <div className="w-full h-100">
+      <div className="z-[9999] mb-2 xl:px-0 text-left flex flex-col xl:flex-row items-center w-full justify-center">
         <GeocodeInput
           defaultValue={trip?.startMarker}
           label="Yükleme konumu"
@@ -96,7 +96,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
         />
 
         <GeocodeInput
-        defaultValue={trip?.endMarker}
+          defaultValue={trip?.endMarker}
           label="Boşaltma konumu"
           className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] inline-block"
           onSelectLocation={(location) => putPointer(location, setEndMarker)}
@@ -107,7 +107,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
       <MapContainer
         ref={mapRef}
         whenReady={handleReady}
-        className="max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto my-4  h-[300px]  md:h-[340px]"
+        className="w-full mx-auto my-4  h-[300px]  md:h-[340px]"
         center={[41.0766019, 29.052495]}
         zoom={13}
         scrollWheelZoom={false}>
