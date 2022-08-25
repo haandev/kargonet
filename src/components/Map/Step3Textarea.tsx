@@ -12,7 +12,7 @@ const Step3Textarea: React.FC<Step3TextareaProps> = ({
   const [info, setInfo] = useState<string>(trip?.information || "")
   useEffect(() => {
     onChangeTrip?.((prev: any) => ({ ...prev, information: info }))
-  }, [info])
+  }, [info, onChangeTrip])
 
   return (
     <div className="w-full">

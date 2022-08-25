@@ -12,6 +12,8 @@ export type TripType = {
   endMarker?: GeocodingLocation
   route?: any
   carType?: CarType
+  selectedDays?: Array<any>
+  information?: string
 }
 export type CarType = /* "shared" |  */ "small" | "medium" | "large"
 const calculatePrice = (trip: any) => {
@@ -113,32 +115,32 @@ const Map = () => {
       {
         name: "İhtiyacınıza yönelik bir araç seçin",
         children: <Step0CarType trip={trip} onChangeTrip={handleChangeTrip} />,
-        continueCondition: Boolean(trip?.route) || true,
+        continueCondition: Boolean(trip?.carType),
         nextTitle: "Konum seçin",
       },
       {
         name: "Başlangıç ve bitiş konumlarını seçin",
         children: <Step1Markers trip={trip} onChangeTrip={handleChangeTrip} />,
-        continueCondition: Boolean(trip?.route) || true,
+        continueCondition: Boolean(trip?.route),
         nextTitle: "Tarih seçin",
       },
       {
         name: "Sizin için uygun tarihleri seçin",
         children: <Step2Calendar trip={trip} onChangeTrip={handleChangeTrip} />,
-        continueCondition: true,
+        continueCondition: Boolean(trip?.selectedDays?.length),
       },
       {
         name: "Yükünüz hakkında kısaca bilgi verin",
         children: <Step3Textarea trip={trip} onChangeTrip={handleChangeTrip} />,
-        continueCondition: true,
+        continueCondition: Number(trip?.information?.length) > 2,
       },
-      { name: "Step 4", continueCondition: true },
-      { name: "Step 5", continueCondition: true },
+      { name: "İletişim bilgileriniz", continueCondition: true },
+      { name: "Özet", continueCondition: true },
     ],
     [handleChangeTrip, trip]
   )
   return (
-    <div className="w-full  justify-center flex">
+    <div className="w-full  justify-center flex" id="scroll-start">
       <div className="text-left flex flex-col items-center max-w-7xl xl:w-full w-[calc(100%-4rem)]">
         <Steps
           price={price}
