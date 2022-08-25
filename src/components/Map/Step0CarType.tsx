@@ -45,7 +45,7 @@ const Step0CarType: React.FC<Step0CarTypeProps> = ({ onChangeTrip, trip }) => {
   return (
     <div className="w-full h-100">
       <RadioGroup value={selectedCar} onChange={setSelectedCar}>
-        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+        <div className="mt-4 grid grid-cols-1 gap-y-2 sm:grid-cols-3 sm:gap-x-4">
           {carLists.map((car) => (
             <RadioGroup.Option
               disabled={!!car.disabled}
@@ -73,7 +73,7 @@ const Step0CarType: React.FC<Step0CarTypeProps> = ({ onChangeTrip, trip }) => {
                         </RadioGroup.Label>
                         <RadioGroup.Description
                           as="span"
-                          className="mt-1 flex items-center text-sm text-gray-500">
+                          className="mt-1 flex items-center text-xs sm:text-sm text-gray-500">
                           {car.description}
                         </RadioGroup.Description>
                         <RadioGroup.Description
