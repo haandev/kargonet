@@ -45,6 +45,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
       >
     ) => {
       stateSetter(location)
+      focusTrap.current?.focus?.()
       mapRef.current.flyTo([location.point.lat, location.point.lng], 14)
     },
     []
@@ -84,6 +85,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
     }
     setMapReady(true)
   }
+  const focusTrap = useRef<HTMLDivElement>(null)
   return (
     <div className="w-full h-100">
       <div className="z-[9999] mb-2 xl:px-0 text-left flex flex-col xl:flex-row items-center w-full justify-center">
@@ -94,7 +96,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
           onSelectLocation={(location) => putPointer(location, setStartMarker)}
           placeholder="nereden?"
         />
-
+        <div ref={focusTrap}></div>
         <GeocodeInput
           defaultValue={trip?.endMarker}
           label="Boşaltma konumu"
