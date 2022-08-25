@@ -118,9 +118,11 @@ export const Steps: React.FC<PropsWithChildren<StepsProps>> = (props) => {
         {props.stepData[currentStepIndex].name}
       </h1>
       {props.stepData[currentStepIndex].children}
-      <div className="flex flex-row">
+      <div className="flex xl:flex-row justify-center max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto my-4">
         {currentStepIndex !== 0 && (
-          <Button className="mx-2" onClick={handlePrev}>
+          <Button
+            className={classNames("mr-2 xl:mx-2 ", "w-[30%]", "xl:w-80")}
+            onClick={handlePrev}>
             <ChevronLeftIcon className="h-5 w-5  mt-[2px]" aria-hidden="true" />
 
             {props.stepData[currentStepIndex].prevTitle || "Geri"}
@@ -128,7 +130,11 @@ export const Steps: React.FC<PropsWithChildren<StepsProps>> = (props) => {
         )}
         {currentStepIndex !== props.stepData.length - 1 && (
           <Button
-            className="mx-2 flex items-center justify-center"
+            className={classNames(
+              "xl:mx-2 ",
+              currentStepIndex !== 0 ? "w-[70%]" : "w-full ",
+              "xl:w-80"
+            )}
             onClick={handleNext}
             disabled={!props.stepData[currentStepIndex].continueCondition}>
             {props.stepData[currentStepIndex].nextTitle || "İleri"}
@@ -137,7 +143,7 @@ export const Steps: React.FC<PropsWithChildren<StepsProps>> = (props) => {
         )}
         {currentStepIndex === props.stepData.length - 1 && (
           <Button
-            className="mx-2"
+            className={classNames("xl:mx-2 ", "w-[70%]", "xl:w-80")}
             onClick={handleNext}
             disabled={!props.stepData[currentStepIndex].continueCondition}>
             {props.finishText || "Sonlandır"}

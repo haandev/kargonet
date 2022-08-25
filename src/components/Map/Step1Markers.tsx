@@ -6,14 +6,35 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import * as GraphHopper from "../../services/http/graphhopper/endpoints"
 import L from "leaflet"
 let routingLayer: any
-
+const drawRoute = (path: any, mapRef: any) => {
+  routingLayer?.addData({
+    type: "Feature",
+    geometry: path.points,
+  } as any)
+  if (path.bbox) {
+    let minLon = path.bbox[0]
+    let minLat = path.bbox[1]
+    let maxLon = path.bbox[2]
+    let maxLat = path.bbox[3]
+    let tmpB = new L.LatLngBounds(
+      new L.LatLng(minLat, minLon),
+      new L.LatLng(maxLat, maxLon)
+    )
+    mapRef.current?.fitBounds?.(tmpB)
+  }
+}
 export interface Step1MarkersProps {
   onChangeTrip?: (trip: any) => void
+  trip?: any
 }
-const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
-  const [startMarker, setStartMarker] = useState<GeocodingLocation>()
-  const [endMarker, setEndMarker] = useState<GeocodingLocation>()
-  const [ , setRoute] = useState<any>({ distance: 0 })
+const Step1Markers: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
+  const [startMarker, setStartMarker] = useState<GeocodingLocation | undefined>(
+    trip?.startMarker
+  )
+  const [endMarker, setEndMarker] = useState<GeocodingLocation | undefined>(
+    trip?.endMarker
+  )
+  const [mapReady, setMapReady] = useState<boolean>(false)
 
   const mapRef = useRef<any>(null)
   const putPointer = useCallback(
@@ -29,7 +50,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
     []
   )
   useEffect(() => {
-    if (startMarker && endMarker) {
+    if (startMarker && endMarker && mapReady) {
       routingLayer?.clearLayers?.()
       GraphHopper.Route({
         point: [
@@ -38,35 +59,20 @@ const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
         ],
       }).then((data: any) => {
         let path = data.paths[0]
-        setRoute(path)
-        props.onChangeTrip?.((prev: any) => ({
+        onChangeTrip?.((prev: any) => ({
           ...prev,
           route: path,
           startMarker,
           endMarker,
         }))
-        routingLayer.addData({
-          type: "Feature",
-          geometry: path.points,
-        } as any)
-        if (path.bbox) {
-          let minLon = path.bbox[0]
-          let minLat = path.bbox[1]
-          let maxLon = path.bbox[2]
-          let maxLat = path.bbox[3]
-          let tmpB = new L.LatLngBounds(
-            new L.LatLng(minLat, minLon),
-            new L.LatLng(maxLat, maxLon)
-          )
-          mapRef.current.fitBounds(tmpB)
-        }
+        drawRoute(path, mapRef)
       })
       routingLayer = L.geoJSON().addTo(mapRef.current)
       routingLayer.options = {
         style: { color: "#00cc33", weight: 8, opacity: 1 },
       }
     }
-  }, [startMarker, endMarker, props])
+  }, [startMarker, endMarker, onChangeTrip, mapReady])
 
   const handleReady = () => {
     const attribution = document.getElementsByClassName(
@@ -76,11 +82,13 @@ const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
     if (attribution.length) {
       attribution[0].remove()
     }
+    setMapReady(true)
   }
   return (
     <div className="w-full">
       <div className="z-[9999] mb-2 px-8 xl:px-0 text-left flex flex-col xl:flex-row items-center w-full justify-center">
         <GeocodeInput
+          defaultValue={trip?.startMarker}
           label="Yükleme konumu"
           className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] inline-block"
           onSelectLocation={(location) => putPointer(location, setStartMarker)}
@@ -88,6 +96,7 @@ const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
         />
 
         <GeocodeInput
+        defaultValue={trip?.endMarker}
           label="Boşaltma konumu"
           className="my-2 mx-auto md:mx-2 w-full xl:w-[38rem] inline-block"
           onSelectLocation={(location) => putPointer(location, setEndMarker)}

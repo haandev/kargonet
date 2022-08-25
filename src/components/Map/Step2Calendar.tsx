@@ -1,10 +1,17 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { Calendar } from "../Calendar"
 
 export interface Step1MarkersProps {
   onChangeTrip?: (trip: any) => void
+  trip?: any
 }
-const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
+const Step2Calendar: React.FC<Step1MarkersProps> = ({ onChangeTrip, trip }) => {
+  const handleChangeSelection = useCallback(
+    (selectedDays: any) => {
+      onChangeTrip?.((prev: any) => ({ ...prev, selectedDays }))
+    },
+    [onChangeTrip]
+  )
   return (
     <div className="max-w-7xl xl:w-full w-[calc(100%-4rem)]  mx-auto h-[450px] ">
       <p className="text-center mb-2 text-gray-600 text-xs">
@@ -12,9 +19,12 @@ const Step1Markers: React.FC<Step1MarkersProps> = (props) => {
         seçmeniz rota planlamasını kolaylaştıracağı için daha iyi bir indirim
         ile ödüllendirilirsiniz.
       </p>
-      <Calendar />
+      <Calendar
+        onChangeSelection={handleChangeSelection}
+        defaultValue={trip?.selectedDays}
+      />
     </div>
   )
 }
 
-export default Step1Markers
+export default Step2Calendar

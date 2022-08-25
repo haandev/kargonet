@@ -11,9 +11,6 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = (props) => {
       disabled={Boolean(props.disabled)}
       className={classNames(
         props.className || "",
-        "w-80",
-        "mx-auto",
-        "mb-8",
         "whitespace-nowrap",
         "inline-flex",
         "items-center",

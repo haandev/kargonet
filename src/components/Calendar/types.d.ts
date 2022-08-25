@@ -1,8 +1,6 @@
 import { ReactNode } from "react"
 
-export interface ButtonProps {
-  className?: string
-  children: ReactNode
-  disabled?: boolean
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+export interface CalendarProps {
+  onChangeSelection: (selectedDays: any) => void
+  defaultValue?: any
 }

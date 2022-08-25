@@ -16,26 +16,27 @@ const Map = () => {
 
   const handleChangeTrip = useCallback((trip: any) => {
     setTrip(trip)
+    console.log(trip)
   }, [])
 
   const steps = useMemo<StepDataType>(
     () => [
       {
         name: "Başlangıç ve bitiş konumlarını seçin",
-        children: <Step1Markers onChangeTrip={handleChangeTrip} />,
-        continueCondition: Boolean(trip?.route) || true, //TODO:remove true
+        children: <Step1Markers trip={trip} onChangeTrip={handleChangeTrip} />,
+        continueCondition: Boolean(trip?.route),
         nextTitle: "Tarih Seçin",
       },
       {
         name: "Sizin için uygun tarihleri seçin",
-        children: <Step2Calendar onChangeTrip={handleChangeTrip} />,
+        children: <Step2Calendar trip={trip} onChangeTrip={handleChangeTrip} />,
         continueCondition: true,
       },
-      { name: "Step 3", continueCondition: true },
+      { name: "Yükünüz hakkında kısaca bilgi verin", continueCondition: true },
       { name: "Step 4", continueCondition: true },
       { name: "Step 5", continueCondition: true },
     ],
-    [handleChangeTrip, trip?.route]
+    [handleChangeTrip, trip]
   )
   return (
     <div className="text-left flex flex-col items-center">

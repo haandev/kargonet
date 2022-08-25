@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid"
 import { useCallback, useEffect, useState } from "react"
+import { CalendarProps } from "./types"
 
 function getLocalDayNames() {
   let d = new Date(2000, 0, 3) // Monday
@@ -47,10 +48,8 @@ const isSelected = (day: any, selectedDays: any) =>
     )
   )
 
-const daysInMonth = (year: number, month: number) =>
-  32 - new Date(year, month, 32).getDate()
 
-export default function Calendar() {
+export const Calendar: React.FC<CalendarProps> = ({onChangeSelection,defaultValue}) => {
   const today = new Date()
   const [current, setCurrent] = useState<{ month: number; year: number }>({
     month: today.getMonth(),
@@ -75,7 +74,9 @@ export default function Calendar() {
   }, [])
 
   const [days, setDays] = useState<any>([])
-  const [selectedDays, setSelectedDays] = useState<any[]>([])
+  const [selectedDays, setSelectedDays] = useState<any[]>(
+    defaultValue || []
+  )
   useEffect(() => {
     const firstDay = new Date(current.year, current.month)
     firstDay.setMinutes(firstDay.getMinutes() + firstDay.getTimezoneOffset())
@@ -96,13 +97,20 @@ export default function Calendar() {
         prev.find(
           (dayRow: any) => dayRow.date.toISOString() === day.date.toISOString()
         )
-      )
-        return prev.filter(
+      ) {
+        const daysArray = prev.filter(
           (dayRow: any) => dayRow.date.toISOString() !== day.date.toISOString()
         )
-      else return [...prev, day]
+        return daysArray
+      } else {
+        const daysArray = [...prev, day]
+        return daysArray
+      }
     })
   }, [])
+  useEffect(() => {
+    onChangeSelection(selectedDays)
+  }, [onChangeSelection, selectedDays])
   return (
     <div className="relative">
       <button
@@ -126,14 +134,10 @@ export default function Calendar() {
         </h2>
         <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
           {localeDayNames.map((dayName, idx) => (
-            <>
-              <div key={idx + "_long"} className="hidden md:block">
-                {dayName.long}
-              </div>
-              <div key={idx + "_shprt"} className="md:hidden">
-                {dayName.short}
-              </div>
-            </>
+            <div key={idx}>
+              <div className="hidden md:block">{dayName.long}</div>
+              <div className="md:hidden">{dayName.short}</div>
+            </div>
           ))}
         </div>
         <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
@@ -144,9 +148,6 @@ export default function Calendar() {
               }}
               disabled={!chooseable(day.date)}
               key={day.date.toISOString()}
-              data-date={day.date.toISOString()}
-              data-getMonth={day.date.getMonth()}
-              data-currentMonth={current.month}
               type="button"
               className={classNames(
                 !isSelected(day, selectedDays) &&
@@ -188,3 +189,5 @@ export default function Calendar() {
     </div>
   )
 }
+
+export default Calendar

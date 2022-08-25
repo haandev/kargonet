@@ -5,4 +5,5 @@ export interface GeocodeInputProps {
   className?:string
   placeholder?:string
   label?:string
+  defaultValue:GeocodingLocation
 }
